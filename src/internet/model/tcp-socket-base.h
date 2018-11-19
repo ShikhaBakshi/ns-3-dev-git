@@ -567,6 +567,9 @@ public:
    */
   typedef void (* TcpTxRxTracedCallback)(const Ptr<const Packet> packet, const TcpHeader& header,
                                          const Ptr<const TcpSocketBase> socket);
+  // Variables for FACK
+  uint32_t m_sndFack;    //!< Sequence number of the forward most acknowledgement
+  uint32_t m_retranData; //!< Number of outstanding retransmitted bytes
 
 protected:
   // Implementing ns3::TcpSocket -- Attribute get/set
@@ -1236,6 +1239,7 @@ protected:
 
   // Options
   bool    m_sackEnabled       {true}; //!< RFC SACK option enabled
+  bool    m_fackEnabled       {false};//!< FACK option disabled
   bool    m_winScalingEnabled {true}; //!< Window Scale option enabled (RFC 7323)
   uint8_t m_rcvWindShift      {0};    //!< Window shift to apply to outgoing segments
   uint8_t m_sndWindShift      {0};    //!< Window shift to apply to incoming segments
