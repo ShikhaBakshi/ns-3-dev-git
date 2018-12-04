@@ -166,20 +166,20 @@ private:
   double m_b;                                   //!< Parameter to PI controller
   double m_w;                                   //!< Sampling frequency (Number of times per second)
   bool m_useEcn;                                //!< True if ECN is used (packets are marked instead of being dropped)
-  double m_knrc                             {0.0003};
-  double m_kc                               {0.5};
-  double m_thc;
-  double m_oldThc                            {0};
-  double m_thnrc;
-  double m_oldThnrc                          {0};
-  double m_ki;
-  double m_kp;
-  double m_capacity;
-  bool m_stpi                            {false};
-  uint32_t m_deptPackets                     {0};
-  double m_routerBusyTime;
-  double m_bpi                             {0.5};
-  double m_rtt                           {0.0000025};
+  double m_knrc                       {0.0003}; //!< EWMA constant for estimation of N/RC
+  double m_kc                            {0.5}; //!< EWMA constant for capacity estimation
+  double m_thc                                ; //!< Estimated capacity
+  double m_oldThc                          {0}; //!< Old value of estimated capacity
+  double m_thnrc                              ; //!< Estimated N/RC
+  double m_oldThnrc                        {0}; //!< Old value of estimated N/RC
+  double m_ki                                 ; //!< STPI parameter Ki used for probability calculation
+  double m_kp                                 ; //!< STPI parameter Kp used for probability calculation
+  double m_capacity                           ; //!< Sampled capacity
+  bool m_stpi                          {false}; //!< Boolean variable to enable/disable STPI feature
+  uint32_t m_deptPackets                   {0}; //!< Departed packets
+  double m_routerBusyTime                     ; //!< Router's Busy time
+  double m_bpi                           {0.5}; // STPI's Beta
+  double m_rtt                        {0.0023}; //RTT
 
   // ** Variables maintained by PI
   TracedValue<double> m_dropProb;               //!< Variable used in calculation of drop probability
