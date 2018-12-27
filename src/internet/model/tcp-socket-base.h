@@ -1124,6 +1124,14 @@ protected:
    */
   void AddOptionSack (TcpHeader& header);
 
+  /**
+   * \brief Add the DSACK block to the header
+   *
+   * \param header TcpHeader where the method should add the option
+   */
+  void AddOptionDsack (TcpHeader& header);
+
+
   /** \brief Process the timestamp option from other side
    *
    * Get the timestamp and the echo, then save timestamp (which will
@@ -1236,6 +1244,7 @@ protected:
 
   // Options
   bool    m_sackEnabled       {true}; //!< RFC SACK option enabled
+  bool    m_dsackEnabled      {false};//!< DSACK option disabled
   bool    m_winScalingEnabled {true}; //!< Window Scale option enabled (RFC 7323)
   uint8_t m_rcvWindShift      {0};    //!< Window shift to apply to outgoing segments
   uint8_t m_sndWindShift      {0};    //!< Window shift to apply to incoming segments
@@ -1266,6 +1275,11 @@ protected:
 
   // Pacing related variable
   Timer m_pacingTimer {Timer::REMOVE_ON_DESTROY}; //!< Pacing Event
+
+  // DSACK related variables
+  bool m_isDsack                   {false};  //!< Boolean variable to check if a duplicate packet has arrived
+  SequenceNumber32 m_dsackFirst    {0};      //!< First Sequence number of DSACK block
+  SequenceNumber32 m_dsackSecond   {0};      //!< Second Sequence number of DSACK block
 
   // Parameters related to Explicit Congestion Notification
   EcnMode_t                     m_ecnMode    {EcnMode_t::NoEcn};      //!< Socket ECN capability
