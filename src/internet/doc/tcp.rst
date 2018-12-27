@@ -45,9 +45,9 @@ are supported, with NewReno the default, and Westwood, Hybla, HighSpeed,
 Vegas, Scalable, Veno, Binary Increase Congestion Control (BIC), Yet Another
 HighSpeed TCP (YeAH), Illinois, H-TCP, Low Extra Delay Background Transport
 (LEDBAT) and TCP Low Priority (TCP-LP) also supported. The model also supports
-Selective Acknowledgements (SACK), Proportional Rate Reduction (PRR) and
-Explicit Congestion Notification (ECN). Multipath-TCP is not yet supported in
-the |ns3| releases.
+Selective Acknowledgements (SACK), Duplicate Selective Acknowledgement (DSACK),
+Proportional Rate Reduction (PRR) and Explicit Congestion Notification (ECN).
+Multipath-TCP is not yet supported in the |ns3| releases.
 
 Model history
 +++++++++++++
@@ -1048,6 +1048,32 @@ implementation.
 
 For an academic peer-reviewed paper on the SACK implementation in ns-3,
 please refer to https://dl.acm.org/citation.cfm?id=3067666.
+
+Duplicate Selective Acknowledgement (DSACK)
++++++++++++++++++++++++++++++++++++++++++++
+The Selective Acknowledgement (SACK) option defined in RFC 2018 is used by the
+TCP data receiver to acknowledge non-contiguous blocks of data not covered by
+the Cumulative Acknowledgement field. However, RFC 2018 does not specify the
+use of the SACK option when duplicate segments are received.
+
+Duplicate Selective Acknowledgement (DSACK) is an extension of the current
+implementation of SACK. The use of DSACK does not require separate negotiation
+between a TCP sender and receiver that have already negotiated SACK capability.
+The absence of separate negotiation for DSACK means that the TCP receiver
+could send DSACK blocks when the TCP sender does not understand this extension
+to SACK. In this case, the TCP sender will simply discard any D-SACK blocks,
+and process the other SACK blocks in the SACK option field.
+
+DSACK extension specifies the use of SACK option to report the receipt of a
+duplicate packet. When D-SACK is used, the first block of the SACK option
+should be a DSACK block specifying the sequence numbers for the duplicate
+segment that triggers the acknowledgement. If the duplicate segment is part of
+larger block of non-contiguous data in the receiver’s data queue, then the
+following SACK block should be used to specify this larger block. Additional
+SACK blocks can be used to specify additional non-contiguous blocks of data, as
+specified in RFC 2018 (SACK).
+
+More information (RFC 2883): https://www.rfc-editor.org/rfc/pdfrfc/rfc2883.txt.pdf
 
 Loss Recovery Algorithms
 ++++++++++++++++++++++++
